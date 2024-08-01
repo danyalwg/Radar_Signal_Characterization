@@ -211,29 +211,30 @@ The architecture for this radar signal characterization project is designed usin
    - **ROC Curve**: Plotted to evaluate the true positive rate against the false positive rate for each class.
    - **Purpose**: These curves provide insights into the model's ability to distinguish between classes and its performance at different classification thresholds.
 
+## Data Preprocessing
+The data preprocessing steps include loading the data, splitting the real and imaginary parts of the IQ samples, stacking the channels, one-hot encoding the labels, and splitting the data into training and validation sets.
+
+### Data Preprocessing Diagram
+<img src="images/Data%20Preprocessing.svg" alt="Data Preprocessing" width="50%">
+
 ## Model Architecture
 The model is built using a combination of Convolutional layers, residual blocks, and an attention layer. It uses the Adam optimizer and categorical cross-entropy loss for training. The model is designed to classify radar signals into different types.
 
 ### Model Architecture Diagram
-![Model Architecture](images/Model%20Architecture.svg)
+<img src="images/Model%20Architecture.svg" alt="Model Architecture" width="50%">
 
 ## Training Process
 The training process involves compiling the model, training it on the training data, and using callbacks to save the best model, apply early stopping, and reduce the learning rate on plateau.
 
 ### Training Process Diagram
-![Training Process](images/Training%20Process.svg)
+<img src="images/training%20process.svg" alt="Training Process" width="50%">
 
 ## Evaluation
 The model's performance is evaluated using a variety of metrics, including accuracy, precision, recall, and F1-score, as well as precision-recall and ROC curves.
 
 ### Evaluation Diagram
-![Evaluation](images/Evaluation.svg)
+<img src="images/Evaluation.svg" alt="Evaluation" width="50%">
 
-## Data Preprocessing
-The data preprocessing steps include loading the data, splitting the real and imaginary parts of the IQ samples, stacking the channels, one-hot encoding the labels, and splitting the data into training and validation sets.
-
-### Data Preprocessing Diagram
-![Data Preprocessing](images/Data%20Preprocessing.svg)
 
 ## Challenges Faced and Unique Features
 
