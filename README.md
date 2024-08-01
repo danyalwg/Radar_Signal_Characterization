@@ -104,19 +104,110 @@ This file handles the training of the machine learning model.
 4. **Training the Model**: Compiles and trains the model using the preprocessed data. It includes callbacks for early stopping, learning rate reduction, and model checkpointing.
 5. **Evaluation and Plotting**: Generates plots for training/validation accuracy and loss, confusion matrix, precision-recall curve, and ROC curve.
 
-## Model Architecture
-The model is built using a combination of Convolutional layers, residual blocks, and an attention layer. It uses the Adam optimizer and categorical cross-entropy loss for training. The model is designed to classify radar signals into different types.
+## Architecture Overview
 
-## Results
-The following plots and metrics are generated during training and saved in the `plots/` directory:
-- Training and Validation Accuracy
-- Training and Validation Loss
-- Confusion Matrix
-- Classification Report
-- Precision-Recall Curve
-- ROC Curve
+The architecture for this radar signal characterization project is designed using a combination of advanced neural network techniques, including Convolutional Neural Networks (CNNs), residual blocks, and attention mechanisms. This sophisticated structure allows the model to effectively process and classify complex radar signal data. Below is an in-depth explanation of each component and process.
 
-These visualizations help in understanding the model's performance and diagnosing any issues during training.
+### Concepts Used
+1. **Convolutional Neural Networks (CNNs)**:
+   - **Purpose**: CNNs are excellent for processing data with grid-like topology, such as images and signals.
+   - **Functionality**: They use convolutional layers to apply filters across the input data, capturing local patterns and features. Each convolution operation produces a feature map highlighting specific features in the data.
 
-## License
-This project is licensed under the MIT License. See the LICENSE file for details.
+2. **Residual Blocks**:
+   - **Purpose**: Enable training of deeper networks by addressing the vanishing gradient problem.
+   - **Functionality**: Each residual block includes a series of convolutional layers and adds the input of the block to its output. This skip connection allows the network to learn residual functions, improving training efficiency and accuracy.
+
+3. **Attention Mechanisms**:
+   - **Purpose**: Enhance the model's ability to focus on the most relevant parts of the input data.
+   - **Functionality**: The attention layer computes a weighted sum of the input features, emphasizing important features while suppressing less relevant ones. This helps the model make more informed decisions based on the most critical parts of the data.
+
+4. **Batch Normalization**:
+   - **Purpose**: Stabilize and accelerate the training process.
+   - **Functionality**: Batch normalization normalizes the inputs of each layer so that they have a mean of zero and a variance of one. This helps in maintaining a consistent distribution of inputs throughout the network, making training faster and more stable.
+
+5. **Dropout**:
+   - **Purpose**: Prevent overfitting.
+   - **Functionality**: Dropout randomly drops units (neurons) during the training process, forcing the network to learn redundant representations. This enhances the model's generalization ability by preventing it from relying too heavily on specific neurons.
+
+### Data Loading and Preprocessing
+
+1. **Loading Data**:
+   - The data is stored in an HDF5 file (`RadChar-Tiny.h5`), which contains complex IQ samples and corresponding labels.
+   - The `h5py` library is used to load the IQ data and labels from the dataset file.
+   - The dataset includes radar signal data with various signal types and parameters.
+
+2. **Preprocessing Data**:
+   - **Splitting Channels**: The real and imaginary parts of the IQ samples are split into two separate channels.
+   - **Stacking Channels**: These channels are then stacked to form the input data, with each sample having two channels: one for the real part and one for the imaginary part.
+   - **One-Hot Encoding**: The labels are converted to categorical format using one-hot encoding.
+   - **Data Splitting**: The data is split into training and validation sets using an 80/20 split, ensuring a proper distribution of samples for model evaluation.
+
+### Model Architecture
+
+1. **Input Layer**:
+   - **Shape**: Accepts data with a shape corresponding to the number of IQ samples and two channels (real and imaginary).
+   - **Functionality**: This layer serves as the entry point for the data into the network.
+
+2. **Convolutional Layers**:
+   - **Initial Convolution**: The first layer applies a 1D convolution to extract features from the input data.
+   - **Feature Extraction**: Subsequent convolutional layers use filters to slide over the input data and apply the convolution operation, capturing local patterns.
+   - **Activation**: ReLU activation functions are applied to introduce non-linearity.
+
+3. **Residual Blocks**:
+   - **Composition**: Each residual block consists of two convolutional layers with batch normalization and ReLU activation.
+   - **Skip Connections**: A skip connection adds the input of the block to its output, allowing the network to learn residual functions.
+   - **Purpose**: These blocks help in building deeper networks by addressing the vanishing gradient problem and enhancing feature learning.
+
+4. **Attention Layer**:
+   - **Mechanism**: An attention mechanism is applied to the output of the residual blocks.
+   - **Functionality**: The attention layer helps the model focus on the most relevant parts of the feature maps, improving its ability to make accurate predictions.
+
+5. **Pooling Layers**:
+   - **MaxPooling**: MaxPooling layers are used to downsample the feature maps, reducing their spatial dimensions while retaining the most important features.
+   - **Purpose**: This helps in reducing the computational complexity and prevents overfitting.
+
+6. **Fully Connected Layers**:
+   - **Flattening**: The flattened output of the final pooling layer is passed through fully connected (dense) layers.
+   - **Dropout**: Dropout is applied to prevent overfitting by randomly dropping units during the training process.
+   - **Activation**: Dense layers use ReLU activation for intermediate layers and softmax activation for the output layer to produce a probability distribution over the classes.
+
+7. **Output Layer**:
+   - **Softmax Activation**: The output layer uses a softmax activation function to produce a probability distribution over the classes, enabling the model to make multi-class predictions.
+
+### Training Process
+
+1. **Compilation**:
+   - **Optimizer**: The model is compiled with the Adam optimizer, known for its efficiency in handling sparse gradients and its adaptive learning rate.
+   - **Loss Function**: Categorical cross-entropy loss is used, suitable for multi-class classification tasks.
+   - **Metrics**: Accuracy is used as the primary metric to evaluate the model's performance.
+
+2. **Callbacks**:
+   - **ModelCheckpoint**: Saves the best model and the last checkpoint during training. This ensures that the best performing model is retained and training can be resumed from the last checkpoint if interrupted.
+   - **EarlyStopping**: Stops training when the validation loss stops improving, preventing overfitting and saving computational resources.
+   - **ReduceLROnPlateau**: Reduces the learning rate when the validation loss plateaus, allowing the model to fine-tune its weights for better performance.
+   - **Custom Callback**: Prints training progress, providing real-time feedback on the model's performance.
+
+3. **Training**:
+   - **Data Feeding**: The model is trained on the training data and validated on the validation data.
+   - **Epochs**: The training process involves multiple epochs, during which the model iteratively adjusts its weights to minimize the loss.
+   - **Batch Size**: Training is done in batches to efficiently use memory and computational resources.
+
+### Evaluation and Plotting
+
+1. **Accuracy and Loss Plots**:
+   - **Visualization**: Plots for training and validation accuracy and loss are generated to visualize the model's performance over time.
+   - **Purpose**: These plots help in understanding how well the model is learning and if there are any signs of overfitting or underfitting.
+
+2. **Confusion Matrix**:
+   - **Generation**: A confusion matrix is generated to evaluate the model's classification performance.
+   - **Purpose**: It provides a detailed breakdown of true positives, false positives, true negatives, and false negatives for each class, helping in diagnosing classification errors.
+
+3. **Classification Report**:
+   - **Metrics**: A classification report is generated to provide detailed metrics like precision, recall, and F1-score for each class.
+   - **Purpose**: These metrics give a comprehensive view of the model's performance across different classes.
+
+4. **Precision-Recall and ROC Curves**:
+   - **Precision-Recall Curve**: Plotted to evaluate the trade-off between precision and recall for each class.
+   - **ROC Curve**: Plotted to evaluate the true positive rate against the false positive rate for each class.
+   - **Purpose**: These curves provide insights into the model's ability to distinguish between classes and its performance at different classification thresholds.
+
