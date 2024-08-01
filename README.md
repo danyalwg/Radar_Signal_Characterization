@@ -55,7 +55,7 @@ cd Radar_Signal_Characterization
 ```
 
 ### Step 2: Download the Dataset
-Download the RadChar dataset from [here](https://github.com/danyalwg/Radar_Signal_Characterization.git) and place it in the `data` directory.
+Download the RadChar dataset from [here](https://github.com/abcxyzi/RadChar.git) and place it in the `data` directory.
 
 ### Step 3: Install Dependencies
 Install the required packages:
