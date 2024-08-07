@@ -66,7 +66,10 @@ pip3 install -r requirements.txt
 ### Step 4: Run the Training Script
 Run the training script:
 ```sh
-python3 src/train_model.py
+cd src
+```
+```sh
+python3 train_model.py
 ```
 Note: Ensure that the dataset path in the `train_model.py` file is correctly set to the actual path where the dataset is located.
 
