@@ -22,7 +22,7 @@ device_name = "/GPU:0" if len(physical_devices) > 0 else "/CPU:0"
 print(f"Using device: {device_name}")
 
 # Load and preprocess data
-file_path = 'D:/personal projects/sir waleed/Radar_Signal_Characterization/data/RadChar-Tiny.h5'
+file_path = '../data/RadChar-Large.h5'
 trainX, valX, trainy, valy = preprocess_data(file_path)
 
 trainX = trainX.reshape(trainX.shape[0], trainX.shape[1], trainX.shape[2])
